@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const url_base = "http://localhost:5000/api"
 
-// cargamos el token:
 const config = {
     headers: {
         Authorization: localStorage.getItem("token") 
@@ -79,11 +78,8 @@ async function getUser(setName, setLastname, setEmail, setId, setFile){
     })
 }
 
-// update user:
 async function updateUser(id, name, lastname, email, password, file, setAvatar){
-    // creamos un objeto tipo FormData para enviar archivos:
     const formData = new FormData();
-    // cargamos los detalles del archivo con formdata ya que estamos usando formularios en lugar de json:
     formData.append("name", name);
     formData.append("lastname", lastname);
     if(email){
@@ -93,7 +89,6 @@ async function updateUser(id, name, lastname, email, password, file, setAvatar){
         formData.append("password", password);
     }
     try{
-        // pasar la imagen con su nombre de campo y valores:
         formData.append(
             "avatar",
             file,
@@ -106,13 +101,22 @@ async function updateUser(id, name, lastname, email, password, file, setAvatar){
     await axios.put(`${url_base}/users/${id}`, formData, config)
     .then(response => {
         console.log("Se han guardado los cambios");
-        // actualizar hook del avatar que se muestra:
         setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
     }).catch(error => {
         console.log(error);
     })
 }
 
+// versión mas simple del getUser para navBar:
+async function getNavUser(setUserame, setAvatar){
+    await axios.get(`${url_base}/users`, config)
+    .then(response => {
+        setUserame(response.data.user.name ? response.data.user.name : "");
+        setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+    }).catch(error =>{
+        console.log(error);
+    })
+}
 
 export{
     registerRequest,
@@ -120,5 +124,6 @@ export{
     forgotRequest,
     resetRequest,
     getUser,
-    updateUser // exportar modulo
+    updateUser,
+    getNavUser // exportar modulo
 }
