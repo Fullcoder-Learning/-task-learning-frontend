@@ -1,8 +1,9 @@
 // importar fragment:
 import {Fragment} from 'react';
 import {useState} from 'react';
+// importar modulo registro:
+import {registerRequest} from '../../requests/userRequest';
 
-// recuperar campo estado del hook:
 function RegisterModalComponent({setAlert}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,13 +19,7 @@ function RegisterModalComponent({setAlert}){
     // crear handle para formulario:
     const handleForm = (e) =>{
         e.preventDefault();
-        console.log(email);
-        console.log(password);
-        // cargar alert durante 3 segundos:
-        setAlert(true);
-        window.setTimeout(()=>{
-            setAlert(false);
-          }, 3000);
+        registerRequest(email, password, setAlert);
     } 
 
     // crear modal:

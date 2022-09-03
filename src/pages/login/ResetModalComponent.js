@@ -1,8 +1,9 @@
 // importar fragment:
 import {Fragment} from 'react';
 import {useState} from 'react';
+// importar servicio:
+import {forgotRequest} from '../../requests/userRequest';
 
-// recuperar campo estado del hook:
 function ResetModalComponent({setAlert}){
     const [email, setEmail] = useState("");
 
@@ -10,18 +11,11 @@ function ResetModalComponent({setAlert}){
         setEmail(e.target.value);
     }
 
-    // crear handle para formulario:
     const handleForm = (e) =>{
         e.preventDefault();
-        console.log(email);
-        // cargar alert durante 3 segundos:
-        setAlert(true);
-        window.setTimeout(()=>{
-            setAlert(false);
-          }, 3000);
+        forgotRequest(email, setAlert);
     } 
 
-    // crear modal:
     return(
         <Fragment>
             <div className="modal fade" id="resetPassword" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
