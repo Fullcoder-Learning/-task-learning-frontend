@@ -1,12 +1,17 @@
-// importar fragment:
 import {Fragment} from 'react';
+// importar el servicio:
+import {deleteTask} from '../../requests/taskRequest';
 
 // recuperar campo id del hook:
-function DeleteTaskModalComponent({id, name}){
+function DeleteTaskModalComponent({id, name, tasks, setTasks}){
     const taskId = id;
     const taskName = name;
 
-    // crear modal:
+    // crear un handle para el botón:
+    const handleButton = (e)=> {
+        deleteTask(tasks, setTasks, taskId);
+    }
+
     return(
         <Fragment>
             <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -21,7 +26,8 @@ function DeleteTaskModalComponent({id, name}){
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Aceptar</button>
+                        {/* Cargar el handle en el botón: */}
+                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleButton}>Aceptar</button>
                     </div>
                     </div>
                 </div>

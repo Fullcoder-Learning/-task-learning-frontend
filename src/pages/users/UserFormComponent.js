@@ -1,18 +1,29 @@
-// importar hook:
-import {useState} from 'react';
+// importar useEffect:
+import {useState, useEffect} from 'react';
+// importar el servicio:
+import {getUser, updateUser} from '../../requests/userRequest';
 
-// cargar hoja de estilo:
 import './UserFormComponent.css';
-// importar avatar por defecto:
-const avatar = require('../../assets/avatar.png');
+// cargar avatar por defecto si no hemos subido uno:
+const defaultAvatar = require('../../assets/avatar.png');
 
 function UserFormComponent(){
-    // crear hooks:
-    const [file, setFile] = useState("");
     const [name, setName] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    // este hook gestionará el input file del avatar:
+    const [file, setFile] = useState(null);
+    // este hook cargará la imagen que tengamos disponible, sino abajo validamos que muestre el avatar por defecto:
+    const [avatar, setAvatar] = useState(null);
+    const [id, setId] = useState("");
+
+    useEffect(()=>{
+        // enviar estados para actualizar campos:
+        getUser(setName, setLastname, setEmail, setId, setAvatar);
+        // console.log(id);
+        
+    },[]);
 
     // crear handles para cambiar estado de hooks:
     const handleFile = (e) =>{
@@ -38,27 +49,24 @@ function UserFormComponent(){
     // crear handle para formulario:
     const handleForm = (e) =>{
         e.preventDefault();
-        console.log(file);
-        console.log(name);
-        console.log(lastname);
-        console.log(email);
-        console.log(password);
+        updateUser(id, name, lastname, email, password, file, setAvatar);
     }
     
     // cargar formulario:
     return(
         <div className="container mt-4 text-center">
-            <form onSubmit={handleForm}>
+            <form onSubmit={handleForm} encType="multipart/form-data">
                 <div className="row">
                     <div className="col">
                         <h3>Datos de usuario</h3>
                         <hr />
-                        <img src={avatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
-                        <input type="file" className="form-control mt-3" placeholder="Subir avatar" onChange={handleFile} />
-                        <input type="text" className="form-control mt-3" placeholder="Nombre" onChange={handleName} />   
-                        <input type="text" className="form-control mt-3" placeholder="Apellidos" onChange={handleLastname} />  
-                        <input type="text" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
-                        <input type="text" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                        {/* Cargar values y filename en caso de input form (validar el avatar que se muestra si existe, sino mostrar uno por defecto): */}
+                        <img src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
+                        <input type="file" className="form-control mt-3" placeholder="Subir avatar" filename={file} onChange={handleFile} />
+                        <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
+                        <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
+                        <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
+                        <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
                         <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
                     </div>
                 </div>

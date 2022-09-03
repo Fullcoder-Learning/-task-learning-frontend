@@ -1,10 +1,15 @@
-// importar fragment:
 import {Fragment} from 'react';
+// importar el servicio:
+import {setOK} from '../../requests/taskRequest';
 
-// recuperar campo id del hook:
-function FinishTaskModalComponent({id, name}){
+// recuperar estado y listado:
+function FinishTaskModalComponent({id, name, tasks, setTasks}){
     const taskId = id;
     const taskName = name;
+
+    const handleButton = (e) => {
+        setOK(tasks, setTasks, taskId);
+    }
 
     // crear modal:
     return(
@@ -21,7 +26,8 @@ function FinishTaskModalComponent({id, name}){
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                        {/* Pasarle el nuevo handle al botón: */}
+                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleButton}>Aceptar</button>
                     </div>
                     </div>
                 </div>

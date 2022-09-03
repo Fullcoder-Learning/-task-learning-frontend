@@ -1,23 +1,20 @@
-// importar hook usestate:
-import {useState} from 'react';
+// importar hook useeffect para listar:
+import {useState, useEffect} from 'react';
 import DeleteTaskModalComponent from './DeleteTaskModalComponent';
-// cargar componente:
 import FinishTaskModalComponent from './FinishTaskModalComponent';
+import {createTaskRequest, ListTaskRequest} from '../../requests/taskRequest';
 
 function TaskTableComponent(){
-    // creamos un hook con el contenido de la tabla:
-    const [dummyData, setDummyData] =  useState([
-        {_id: 1, name: "Cocinar", description: "Cocinar galletas el sábado", date_created: "08/08/2022", is_complete: true, date_finish: "10/08/2022"},
-        {_id: 2, name: "Preparar proyecto", description: "Preparar proyecto para presentar en Septiembre", date_created: "15/08/2022", is_complete: false},
-        {_id: 3, name: "Estudiar Java", description: "Aprender Java para cubrir las especificaciones del proyecto", date_created: "19/08/2022", is_complete: false}
-    ])
+    const [tasks, setTasks] = useState(null);
 
-    // preparar hook para recuperar id, titulo y descripción:
     const [id, setId] = useState(null);
     const [name, setName] = useState(null);
     const [description, setDescription] = useState(null);
 
-    // crear handle para id:
+    useEffect(()=>{
+        ListTaskRequest(setTasks);
+    },[]);
+
     const dataHandle = (id, name) => {
         return (e)=>{
             setId(id);
@@ -25,21 +22,17 @@ function TaskTableComponent(){
         }
     }
 
-    // crear handle para título:
     const handleName = (e) => {
         setName(e.target.value);
     }
 
-    // crear handle para descripcion:
     const handleDescription = (e) => {
         setDescription(e.target.value);
     }
 
-    // crear handle para formulario:
     const handleForm = (e) => {
         e.preventDefault();
-        setDummyData(task => [...task, {_id: 4, name: name, description: description}])
-
+        createTaskRequest(name, description, setTasks);
     }
 
     return(
@@ -56,8 +49,8 @@ function TaskTableComponent(){
                     </tr>
                 </thead>
                 <tbody className="text-start">
-                    {
-                        dummyData.map(data => {
+                    { tasks ? (
+                        tasks.map(data => {
                             return(
                                 <tr key={data._id}>
                                     <td>{data.name}</td>
@@ -71,9 +64,8 @@ function TaskTableComponent(){
                                     </td>
                                 </tr>
                             )
-                        })
+                        })) : (<tr colSpan="6"><td>No existen tareas</td></tr>)
                     }
-                    {/* Crear un formulario para añadir nuevas tareas: */}
                     <tr className="text-center">
                         <td></td>
                         <td></td>
@@ -89,9 +81,8 @@ function TaskTableComponent(){
                     </tr>
                 </tbody>
             </table>
-            {/* Añadimos el componente y le pasamos el hook id: */}
-            <FinishTaskModalComponent id={id} name={name} />
-            <DeleteTaskModalComponent id={id} name={name} />
+            <FinishTaskModalComponent id={id} name={name} tasks={tasks} setTasks={setTasks} />
+            <DeleteTaskModalComponent id={id} name={name} tasks={tasks} setTasks={setTasks} />
         </div>
     )
 }

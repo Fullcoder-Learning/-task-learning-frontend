@@ -1,13 +1,20 @@
 import {Fragment} from 'react';
 import {useState} from 'react';
 import './ResetPasswordPage.css';
+// importar useParams de React Router:
+import { useParams } from 'react-router-dom';
+// importar servicio reset password:
+import {resetRequest} from '../../requests/userRequest';
 
-function LoginPage(){
+function ResetPasswordPage(){
     // crear dos hooks para la contraseña:
     const [newPassword, setNewPassword] = useState("");
     const [repiteNewPassword, setRepiteNewPassword] = useState("");
     const [alert, setAlert] = useState(false);
     const [match, setMatch] = useState(true);
+
+    // recuperar parametros de ruta:
+    const {id, token} = useParams();
 
     // crear handles:
     const handleNewPassword = (e) => {
@@ -22,17 +29,17 @@ function LoginPage(){
         e.preventDefault();
         console.log(newPassword);
         console.log(repiteNewPassword);
+        console.log(id);
+        console.log(token);
         // comprobar que las contraseñas coinciden:
         if(newPassword !== repiteNewPassword){
             console.log("No coinciden las claves");
             setMatch(false);
         }else{
-            // cargar alert y redirigir en 3 segundos:
             setMatch(true);
-            setAlert(true);
-            window.setTimeout(()=>{
-                window.location.href = "/login";
-            }, 3000);
+            // enviar nueva contraseña:
+            resetRequest(newPassword, repiteNewPassword, id, token, setAlert)
+            
         }
         
     }
@@ -64,4 +71,4 @@ function LoginPage(){
     )
 }
 
-export default LoginPage;
+export default ResetPasswordPage;
