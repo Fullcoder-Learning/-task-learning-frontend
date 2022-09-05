@@ -1,30 +1,28 @@
 import {Fragment} from 'react';
 // importar el servicio:
-import {deleteTask} from '../../requests/taskRequest';
+import {deleteUserRequest} from '../../requests/userRequest';
 
 // recuperar campo id del hook:
-function DeleteTaskModalComponent({id, name, tasks, setTasks}){
-    const taskId = id;
-    const taskName = name;
+function DeleteUserModalComponent({id}){
+    const userId = id;
 
     // crear un handle para el botón:
     const handleButton = (e)=> {
-        console.log("TAREA:" + taskId);
-        deleteTask(tasks, setTasks, taskId);
+        deleteUserRequest(userId);
     }
 
     return(
         <Fragment>
-            <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="deleteUserModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">Se va a eliminar la siguiente tarea</h5>
+                        <h5 className="modal-title" id="exampleModalLabel">Cerrar cuenta</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                        <p>Tarea: {taskName}</p>
-                        <small>Codigo: {taskId}</small>
+                        <p>Se va a eliminar su cuenta de usuario junto a todas sus tareas</p>
+                        <p>Esta operación no tiene retorno, ¿proceder?</p>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -38,4 +36,4 @@ function DeleteTaskModalComponent({id, name, tasks, setTasks}){
     )
 }
 
-export default DeleteTaskModalComponent;
+export default DeleteUserModalComponent;

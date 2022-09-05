@@ -4,7 +4,7 @@ import {useState} from 'react';
 // importar modulo registro:
 import {registerRequest} from '../../requests/userRequest';
 
-function RegisterModalComponent({setAlert}){
+function RegisterModalComponent({setAlert, setAlertErrorRegister}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +19,7 @@ function RegisterModalComponent({setAlert}){
     // crear handle para formulario:
     const handleForm = (e) =>{
         e.preventDefault();
-        registerRequest(email, password, setAlert);
+        registerRequest(email, password, setAlert, setAlertErrorRegister);
     } 
 
     // crear modal:
@@ -36,8 +36,8 @@ function RegisterModalComponent({setAlert}){
                     <form onSubmit={handleForm}>
                         <div className="row">
                             <div className="col">
-                                <input type="email" className="form-control mt-3" placeholder="Email" onChange={handleEmail} />  
-                                <input type="password" className="form-control mt-3" placeholder="Contraseña" onChange={handlePassword} /> 
+                                <input type="email" className="form-control mt-3" placeholder="Email" minLength="5" onChange={handleEmail} />  
+                                <input type="password" className="form-control mt-3" placeholder="Contraseña" minLength="1" onChange={handlePassword} /> 
                                 <input type="submit" className="btn btn-success form-control mt-3" value="Darse de alta" data-bs-dismiss="modal" />
                             </div>
                         </div>

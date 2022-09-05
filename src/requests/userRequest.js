@@ -9,7 +9,7 @@ const config = {
 }
 
 
-async function registerRequest(email, password, setAlert){
+async function registerRequest(email, password, setAlert, setAlertErrorRegister){
     await axios.post(`${url_base}/register`, {
         email: email,
         password: password
@@ -21,10 +21,14 @@ async function registerRequest(email, password, setAlert){
         }, 3000);
     }).catch(error =>{
         console.log(error);
+        setAlertErrorRegister(true);
+        window.setTimeout(()=>{
+            setAlertErrorRegister(false);
+        }, 3000);
     });
 }
 
-async function loginRequest(email, password){
+async function loginRequest(email, password, setAlertError){
     await axios.post(`${url_base}/login`, {
         email: email,
         password: password
@@ -34,10 +38,14 @@ async function loginRequest(email, password){
         window.location.href = '/';
     }).catch(error =>{
         console.log(error);
+        setAlertError(true);
+        window.setTimeout(()=>{
+            setAlertError(false);
+        }, 3000);
     });
 }
 
-async function forgotRequest(email, alertState){
+async function forgotRequest(email, alertState, setResetAlertError){
     await axios.post(`${url_base}/forgot`, {
         email: email
     }) 
@@ -48,8 +56,14 @@ async function forgotRequest(email, alertState){
         }, 3000);
     }).catch(error =>{
         console.log(error);
+        setResetAlertError(true);
+        window.setTimeout(()=>{
+            setResetAlertError(false);
+        }, 3000);
     });
 }
+
+
 async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
     await axios.put(`${url_base}/reset/${id}/${token}`, {
         newPassword: newPassword,
@@ -78,7 +92,7 @@ async function getUser(setName, setLastname, setEmail, setId, setFile){
     })
 }
 
-async function updateUser(id, name, lastname, email, password, file, setAvatar){
+async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlert){
     const formData = new FormData();
     formData.append("name", name);
     formData.append("lastname", lastname);
@@ -102,17 +116,30 @@ async function updateUser(id, name, lastname, email, password, file, setAvatar){
     .then(response => {
         console.log("Se han guardado los cambios");
         setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+        setAlert(true);
+        window.setTimeout(()=>{
+            setAlert(false);
+        }, 3000);
     }).catch(error => {
         console.log(error);
     })
 }
 
-// versión mas simple del getUser para navBar:
 async function getNavUser(setUserame, setAvatar){
     await axios.get(`${url_base}/users`, config)
     .then(response => {
         setUserame(response.data.user.name ? response.data.user.name : "");
         setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
+    }).catch(error =>{
+        console.log(error);
+    })
+}
+
+async function deleteUserRequest(id){
+    await axios.delete(`${url_base}/users/${id}`, config)
+    .then(response => {
+        localStorage.clear();
+        window.location.href = '/login';
     }).catch(error =>{
         console.log(error);
     })
@@ -125,5 +152,6 @@ export{
     resetRequest,
     getUser,
     updateUser,
-    getNavUser // exportar modulo
+    getNavUser,
+    deleteUserRequest 
 }
