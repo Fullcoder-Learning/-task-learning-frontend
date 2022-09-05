@@ -4,7 +4,8 @@ import {useState} from 'react';
 // importar servicio:
 import {forgotRequest} from '../../requests/userRequest';
 
-function ResetModalComponent({setAlert}){
+// se le pasa el estado de error:
+function ResetModalComponent({setAlert, setResetAlertError}){
     const [email, setEmail] = useState("");
 
     const handleEmail = (e) =>{
@@ -13,7 +14,8 @@ function ResetModalComponent({setAlert}){
 
     const handleForm = (e) =>{
         e.preventDefault();
-        forgotRequest(email, setAlert);
+        // cargar la función para recuperar contraseña:
+        forgotRequest(email, setAlert, setResetAlertError);
     } 
 
     return(

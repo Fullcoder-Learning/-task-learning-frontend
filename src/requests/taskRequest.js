@@ -37,7 +37,8 @@ async function setOK(tasks, setTasks, id){
         console.log(tasks);
         tasks.map(task =>{
             if(task._id === id){
-                task.is_complete = true
+                task.is_complete = true;
+                task.date_finish = Date.now();
             }
             return(null);
         });
@@ -49,14 +50,32 @@ async function setOK(tasks, setTasks, id){
     })
 }
 
-// eliminar tarea:
 async function deleteTask(tasks, setTasks, id){
     await axios.delete(`${url_base}/tasks/${id}`, config)
     .then(response => {
-        // eliminar tarea de la colección:
         setTasks(tasks => [...tasks.filter(task => task._id !== id)]);
     }).catch(error =>{  
         console.log(error);
+    })
+}
+
+// actualizar tarea:
+async function updateTaskRequest(id, name, description, tasks, setTasks){
+    await axios.put(`${url_base}/tasks/${id}`, {
+        name: name,
+        description: description
+    }, config)
+    .then(response => {
+        tasks.map(task =>{
+            if(task._id === id){
+                task.name = response.data.task.name;
+                task.description = response.data.task.description;
+            }
+            return(null);
+        });
+        
+        console.log(tasks);
+        setTasks(tasks => [...tasks]);
     })
 }
 
@@ -64,5 +83,6 @@ export{
     createTaskRequest,
     ListTaskRequest,
     setOK,
-    deleteTask // exportar modulo
+    deleteTask,
+    updateTaskRequest // exportar modulo
 }
