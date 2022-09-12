@@ -51,7 +51,7 @@ function UserFormComponent(){
     
     return(
         <div className="container mt-4 text-center">
-            <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
+            <div className={alert === true ? "alert alert-success save-user text-start" : "alert alert-success fade"} role="alert">
                 Se han actualizado los datos.
             </div>
             <form onSubmit={handleForm} encType="multipart/form-data">

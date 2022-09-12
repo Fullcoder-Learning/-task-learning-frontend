@@ -4,14 +4,18 @@ import './LoginPage.css';
 import RegisterModalComponent from './RegisterModalComponent';
 import ResetModalComponent from './ResetModalComponent';
 import {loginRequest} from '../../requests/userRequest';
+// importar componente alert:
+import {AlertCommon} from '../../common/AlertCommon'
 
 function LoginPage(){
-    const [alert, setAlert] = useState(false);
-    const [alertErrorRegister, setAlertErrorRegister] = useState(false);
+    const [alertSuccess, setAlertSuccess] = useState(false);
     const [alertError, setAlertError] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    //const [alertError, setAlertError] = useState(false);
     // cargar los hooks para las alertas:
     const [resetAlert, setResetAlert] = useState(false);
     const [resetAlertError, setResetAlertError] = useState(false);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -30,6 +34,7 @@ function LoginPage(){
 
     return(
         <Fragment>
+            <AlertCommon alertSuccess={alertSuccess} alertError={alertError} alertMessage={alertMessage} />
             <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
                 Registro realizado con éxito. Ya puedes iniciar sesión.
             </div>
