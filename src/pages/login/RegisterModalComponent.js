@@ -4,7 +4,7 @@ import {useState} from 'react';
 // importar modulo registro:
 import {registerRequest} from '../../requests/userRequest';
 
-function RegisterModalComponent({setAlert, setAlertErrorRegister}){
+function RegisterModalComponent({setAlertSuccess, setAlertError, setAlertMessage}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +19,7 @@ function RegisterModalComponent({setAlert, setAlertErrorRegister}){
     // crear handle para formulario:
     const handleForm = (e) =>{
         e.preventDefault();
-        registerRequest(email, password, setAlert, setAlertErrorRegister);
+        registerRequest(email, password, setAlertSuccess, setAlertError, setAlertMessage);
     } 
 
     // crear modal:

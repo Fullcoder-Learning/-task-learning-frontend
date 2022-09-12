@@ -27,7 +27,7 @@ function NavBarCommon(){
                         <NavLink to="/"className="navbar-brand">Task Learn</NavLink>
                     </div>
                     
-                    <ul className="navbar-nav mb-2 mb-lg-0 col-md-1 align-items-end me-3">
+                    <ul className="navbar-nav mb-2 mb-lg-0 align-items-end me-3">
                         <li className="nav-item align-items-end">
                             <NavLink to="/users" className="nav-link text-center">
                                 {/* se modifican los campos para que reciban los hooks, en el caso de la imagen hay que validar: */}
