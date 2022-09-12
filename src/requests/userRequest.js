@@ -9,26 +9,28 @@ const config = {
 }
 
 
-async function registerRequest(email, password, setAlert, setAlertErrorRegister){
+async function registerRequest(email, password, setAlertSuccess, setAlertError, setAlertMessage){
     await axios.post(`${url_base}/register`, {
         email: email,
         password: password
     }) 
     .then(response => {
-        setAlert(true);
+        setAlertSuccess(true);
+        setAlertMessage("Registro realizado con éxito. Ya puedes iniciar sesión.");
         window.setTimeout(()=>{
-            setAlert(false);
+            setAlertSuccess(false);
         }, 3000);
     }).catch(error =>{
         console.log(error);
-        setAlertErrorRegister(true);
+        setAlertError(true);
+        setAlertMessage("Error al crear usuario, el email ya existe.");
         window.setTimeout(()=>{
-            setAlertErrorRegister(false);
+            setAlertError(false);
         }, 3000);
     });
 }
 
-async function loginRequest(email, password, setAlertError){
+async function loginRequest(email, password, setAlertError, setAlertMessage){
     await axios.post(`${url_base}/login`, {
         email: email,
         password: password
@@ -39,39 +41,44 @@ async function loginRequest(email, password, setAlertError){
     }).catch(error =>{
         console.log(error);
         setAlertError(true);
+        setAlertMessage("Error al iniciar sesión, usuario o contraseña incorrectos.");
         window.setTimeout(()=>{
             setAlertError(false);
         }, 3000);
     });
 }
 
-async function forgotRequest(email, alertState, setResetAlertError){
+async function forgotRequest(email, setAlertSuccess, setAlertError, setAlertMessage){
     await axios.post(`${url_base}/forgot`, {
         email: email
     }) 
     .then(response => {
-        alertState(true);
+        setAlertSuccess(true);
+        setAlertMessage("Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.");
         window.setTimeout(()=>{
-            alertState(false);
+            setAlertSuccess(false);
         }, 3000);
     }).catch(error =>{
         console.log(error);
-        setResetAlertError(true);
+        setAlertError(true);
+        setAlertMessage("Error, el email introducido no existe.");
         window.setTimeout(()=>{
-            setResetAlertError(false);
+            setAlertError(false);
         }, 3000);
     });
 }
 
 
-async function resetRequest(newPassword, repiteNewPassword, id, token, alertState){
+async function resetRequest(newPassword, repiteNewPassword, id, token, setAlertSuccess, setAlertMessage){
     await axios.put(`${url_base}/reset/${id}/${token}`, {
         newPassword: newPassword,
         repitePassword: repiteNewPassword
     }) 
     .then(response => {
-        alertState(true);
+        setAlertSuccess(true);
+        setAlertMessage("Contraseña restablecida con éxito. Ya puedes iniciar sesión.");
         window.setTimeout(()=>{
+            setAlertSuccess(false);
             window.location.href = "/login";
         }, 3000);
     }).catch(error =>{
@@ -92,7 +99,7 @@ async function getUser(setName, setLastname, setEmail, setId, setFile){
     })
 }
 
-async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlert){
+async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlertSuccess, setAlertMessage){
     const formData = new FormData();
     formData.append("name", name);
     formData.append("lastname", lastname);
@@ -116,9 +123,10 @@ async function updateUser(id, name, lastname, email, password, file, setAvatar, 
     .then(response => {
         console.log("Se han guardado los cambios");
         setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
-        setAlert(true);
+        setAlertSuccess(true);
+        setAlertMessage("Se han actualizado los datos.");
         window.setTimeout(()=>{
-            setAlert(false);
+            setAlertSuccess(false);
         }, 3000);
     }).catch(error => {
         console.log(error);

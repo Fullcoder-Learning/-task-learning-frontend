@@ -5,16 +5,12 @@ import RegisterModalComponent from './RegisterModalComponent';
 import ResetModalComponent from './ResetModalComponent';
 import {loginRequest} from '../../requests/userRequest';
 // importar componente alert:
-import {AlertCommon} from '../../common/AlertCommon'
+import AlertCommon from '../../common/AlertCommon';
 
 function LoginPage(){
     const [alertSuccess, setAlertSuccess] = useState(false);
     const [alertError, setAlertError] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
-    //const [alertError, setAlertError] = useState(false);
-    // cargar los hooks para las alertas:
-    const [resetAlert, setResetAlert] = useState(false);
-    const [resetAlertError, setResetAlertError] = useState(false);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,28 +25,13 @@ function LoginPage(){
 
     const handleForm = (e) =>{
         e.preventDefault();
-        loginRequest(email, password, setAlertError);
+        loginRequest(email, password, setAlertError, setAlertMessage);
     } 
 
     return(
         <Fragment>
-            <AlertCommon alertSuccess={alertSuccess} alertError={alertError} alertMessage={alertMessage} />
-            <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
-                Registro realizado con éxito. Ya puedes iniciar sesión.
-            </div>
-            <div className={alertErrorRegister === true ? "alert alert-warning" : "alert alert-success fade"} role="alert">
-                Error al crear usuario, el email ya existe.
-            </div>
-            <div className={alertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
-                Error al iniciar sesión, usuario o contraseña incorrectos.
-            </div>
-            <div className={resetAlert === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
-                Se ha enviado un email para restablecer contraseña, por favor revisa tu bandeja de entrada.
-            </div>
-            {/* Añadir la alerta si no se reestablece la contraseña: */}
-            <div className={resetAlertError === true ? "alert alert-danger" : "alert alert-danger fade"} role="alert">
-                Error, el email introducido no existe.
-            </div>
+            {/* cargar el componente de alerta: */}
+        <AlertCommon alertSuccess={alertSuccess} alertError={alertError} alertMessage={alertMessage} />
             <div className="bodystyle text-center" cz-shortcut-listen="true">
                 <div className="form-signin text-center">
                     <form onSubmit={handleForm}>
@@ -73,9 +54,9 @@ function LoginPage(){
                     </form>
                 </div>
             </div>
-            <RegisterModalComponent setAlert={setAlert} setAlertErrorRegister={setAlertErrorRegister} />
+            <RegisterModalComponent setAlertSuccess={setAlertSuccess} setAlertError={setAlertError} setAlertMessage={setAlertMessage} />
             {/* Enviar el estado de la alerta: */}
-            <ResetModalComponent setAlert={setResetAlert} setResetAlertError={setResetAlertError} />
+            <ResetModalComponent setAlertSuccess={setAlertSuccess} setAlertError={setAlertError} setAlertMessage={setAlertMessage} />
         </Fragment>
     )
 }

@@ -5,13 +5,19 @@ import './ResetPasswordPage.css';
 import { useParams } from 'react-router-dom';
 // importar servicio reset password:
 import {resetRequest} from '../../requests/userRequest';
+import AlertCommon from '../../common/AlertCommon';
 
 function ResetPasswordPage(){
     // crear dos hooks para la contraseña:
     const [newPassword, setNewPassword] = useState("");
     const [repiteNewPassword, setRepiteNewPassword] = useState("");
-    const [alert, setAlert] = useState(false);
+    
+    // crear hook para validar que coinciden las contraseñas:
     const [match, setMatch] = useState(true);
+
+    // crear hooks para alertas:
+    const [alertSuccess, setAlertSuccess] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
 
     // recuperar parametros de ruta:
     const {id, token} = useParams();
@@ -38,7 +44,7 @@ function ResetPasswordPage(){
         }else{
             setMatch(true);
             // enviar nueva contraseña:
-            resetRequest(newPassword, repiteNewPassword, id, token, setAlert)
+            resetRequest(newPassword, repiteNewPassword, id, token, setAlertSuccess, setAlertMessage);
             
         }
         
@@ -47,9 +53,7 @@ function ResetPasswordPage(){
     return(
         <Fragment>
             {/* crear un alert con condición de ocultar en la clase: */}
-            <div className={alert === true ? "alert alert-success" : "alert alert-success fade"} role="alert">
-                Contraseña restablecida con éxito. Ya puedes iniciar sesión.
-            </div>
+            <AlertCommon alertSuccess={alertSuccess} alertMessage={alertMessage} />
             <div className="bodystyle text-center" cz-shortcut-listen="true">
                 <div className="form-signin text-center">
                     <form onSubmit={handleForm}>

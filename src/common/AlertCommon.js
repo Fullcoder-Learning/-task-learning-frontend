@@ -1,11 +1,7 @@
 import {Fragment} from 'react';
 
-function AlertCommon(){
+function AlertCommon({alertSuccess, alertError, alertMessage}){
 
-    const alertSuccess = false;
-    const alertError = false;
-    const alertMessage = "";
-    
     return(
         <Fragment>
             <div className={alertSuccess === true ? "alert alert-success show-alert" : "alert alert-success show-alert fade"} role="alert">
