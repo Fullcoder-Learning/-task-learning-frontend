@@ -67,7 +67,7 @@ async function updateTaskRequest(id, name, description, tasks, setTasks){
     }, config)
     .then(response => {
         tasks.map(task =>{
-            if(task._id === id){
+            if(task._id === taskData._id){
                 task.name = response.data.task.name;
                 task.description = response.data.task.description;
             }
