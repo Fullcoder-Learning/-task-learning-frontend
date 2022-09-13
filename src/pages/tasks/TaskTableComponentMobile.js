@@ -10,7 +10,7 @@ function TaskTableComponent({tasks, showTask, inputUpdate, dataHandle,
                 tasks.map(data => {
                     return(
                         <div key={data._id} style={showTask ? null : inputUpdate} className="list-group-item list-group-item-action" aria-current="true" onClick={
-                            getTaskData(data._id, data.name, data.description, data.date_created, data.is_complete, data.date_finish)}>
+                            getTaskData(data)}>
                             <div className="d-flex w-100 justify-content-between">
                             <h5 className="mb-1">{data.name}</h5>
                             <small>{moment(data.date_created).format('D/M/YYYY, h:mm:ss a')}</small>

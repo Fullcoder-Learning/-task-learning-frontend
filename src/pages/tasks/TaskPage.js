@@ -17,7 +17,7 @@ function TaskPage(){
     const [tasks, setTasks] = useState(null);
     // Crear un nuevo hook que unifica los datos:
     const [taskData, setTaskData] = useState({
-        id: null,
+        _id: null,
         name: "",
         description: "",
         date_created: null,
@@ -61,17 +61,11 @@ function TaskPage(){
     }
 
     // crear un nuevo handle para preparar datos a eliminar o finalizar tarea:
-    const getTaskData = (id, name, description, createDate, isComplete, dateFinish, updateButtonClick=false) => {
+    const getTaskData = (data, updateButtonClick=false) => {
         return (e) => {
+            const dataForm = data;
             // con el uso de spread le pasamos los datos al hook:
-            setTaskData(
-                {...taskData, 
-                    id: id, name: name, description: description,
-                    date_created: createDate, is_complete: isComplete,
-                    date_finish: dateFinish
-                }
-                );
-            
+            setTaskData({...taskData, ...dataForm});
             // cambiar a modo actualizar en vista general:
             if(updateButtonClick){
                 setShowTask(false);
@@ -114,8 +108,8 @@ function TaskPage(){
             </div>
             {/* Mover los componentes de modal: */}
             
-            <FinishTaskModalComponent id={taskData.id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
-            <DeleteTaskModalComponent id={taskData.id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
+            <FinishTaskModalComponent id={taskData._id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
+            <DeleteTaskModalComponent id={taskData._id} name={taskData.name} tasks={tasks} setTasks={setTasks} />
         </Fragment>
     )
 }

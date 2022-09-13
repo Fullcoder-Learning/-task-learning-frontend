@@ -33,9 +33,9 @@ function TaskTableComponent({tasks, showTask, inputUpdate, dataHandle,
                                     <td className="text-center">{data.is_complete ? ('Si') : ('No')}</td>
                                     <td>{data.date_finish ? (moment(data.date_finish).format('D/M/YYYY, h:mm:ss a')) : ('')}</td>
                                     <td className="text-center">
-                                        <button type="button" onClick={getTaskData(data._id, data.name, data.description, data.date_created, data.is_complete, data.date_finish, true)} className="btn btn-sm btn-warning me-2 mb-1">Editar</button>
-                                        <button type="button" onClick={getTaskData(data._id, data.name)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
-                                        <button type="button" onClick={getTaskData(data._id, data.name)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
+                                        <button type="button" onClick={getTaskData(data, true)} className="btn btn-sm btn-warning me-2 mb-1">Editar</button>
+                                        <button type="button" onClick={getTaskData(data)} className="btn btn-sm btn-primary me-2 mb-1" data-bs-toggle="modal" data-bs-target="#finishModal">Finalizar</button>
+                                        <button type="button" onClick={getTaskData(data)} className="btn btn-sm btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</button>
                                     </td>
                                 </tr>
                             )
