@@ -86,39 +86,44 @@ async function resetRequest(newPassword, repiteNewPassword, id, token, setAlertS
     });
 }
 
-async function getUser(setName, setLastname, setEmail, setId, setFile){
+async function getUser(setForm, setId, setAvatar){
     await axios.get(`${url_base}/users`, config)
     .then(response => {
-        setName(response.data.user.name ? response.data.user.name : "");
-        setLastname(response.data.user.lastname ? response.data.user.lastname : "");
-        setEmail(response.data.user.email ? response.data.user.email : "");
+        let data = {
+            name: response.data.user.name ? response.data.user.name : "", 
+            lastname: response.data.user.lastname ? response.data.user.lastname : "", 
+            email: response.data.user.email ? response.data.user.email : ""
+        };
+        let form = {};
+        setForm({...form, ...data});
         setId(response.data.user._id ? response.data.user._id : "");
-        setFile(response.data.user.avatar ? response.data.user.avatar : null);
+        setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
     }).catch(error =>{
         console.log(error);
     })
 }
 
-async function updateUser(id, name, lastname, email, password, file, setAvatar, setAlertSuccess, setAlertMessage){
+async function updateUser(id, form, setAvatar, setAlertSuccess, setAlertMessage){
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("lastname", lastname);
-    if(email){
-        formData.append("email", email);
+    console.log(form.email);
+    formData.append("name", form.name);
+    formData.append("lastname", form.lastname);
+    if(form.email){
+        formData.append("email", form.email);
     }
-    if(password){
-        formData.append("password", password);
+    if(form.password){
+        formData.append("password", form.password);
     }
     try{
         formData.append(
             "avatar",
-            file,
-            file.name
+            form.file,
+            form.file.name
         )
     }catch(error){
         console.log("no se ha cargado archivo");
     }
-
+    console.log(formData);
     await axios.put(`${url_base}/users/${id}`, formData, config)
     .then(response => {
         console.log("Se han guardado los cambios");
@@ -136,7 +141,7 @@ async function updateUser(id, name, lastname, email, password, file, setAvatar, 
 async function getNavUser(setUserame, setAvatar){
     await axios.get(`${url_base}/users`, config)
     .then(response => {
-        setUserame(response.data.user.name ? response.data.user.name : "");
+        setUserame(response.data.user.name ? response.data.user.name : "Usuario");
         setAvatar(response.data.user.avatar ? response.data.user.avatar : null);
     }).catch(error =>{
         console.log(error);

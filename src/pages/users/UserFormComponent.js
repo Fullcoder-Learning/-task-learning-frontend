@@ -13,11 +13,14 @@ const defaultAvatar = require('../../assets/avatar.png');
 
 
 function UserFormComponent(){
-    const [name, setName] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [file, setFile] = useState(null);
+    // hook para datos del formulario:
+    const [form, setForm] = useState({
+        name: "",
+        lastname: "",
+        email: "",
+        password: "",
+        file: null
+    })
     const [avatar, setAvatar] = useState(null);
     const [id, setId] = useState("");
     const [alertSuccess, setAlertSuccess] = useState(false);
@@ -25,33 +28,25 @@ function UserFormComponent(){
 
 
     useEffect(()=>{
-        getUser(setName, setLastname, setEmail, setId, setAvatar);
-        
+        getUser(setForm, setId, setAvatar);
     },[]);
 
-    const handleFile = (e) =>{
-        setFile(e.target.files[0]);
+    // creamos un manejador para los datos del formulario:
+    const handleData = (e) => {
+        const {name, value} = e.target;
+        setForm({...form, [name]: value});
     }
 
-    const handleName = (e) =>{
-        setName(e.target.value);
-    }
-
-    const handleLastname = (e) =>{
-        setLastname(e.target.value);
-    }
-
-    const handleEmail = (e) =>{
-        setEmail(e.target.value);
-    }
-
-    const handlePassword = (e) =>{
-        setPassword(e.target.value);
+    // y otro para el archivo:
+    const handleFile = (e) => {
+        let file = {file: e.target.files[0]};
+        setForm({...form, ...file})
     }
 
     const handleForm = (e) =>{
         e.preventDefault();
-        updateUser(id, name, lastname, email, password, file, setAvatar, setAlertSuccess, setAlertMessage);
+        console.log(form);
+        updateUser(id, form, setAvatar, setAlertSuccess, setAlertMessage);
     }
     
     return(
@@ -64,11 +59,11 @@ function UserFormComponent(){
                             <h3>Datos de usuario</h3>
                             <hr />
                             <img src={avatar ? `http://localhost:5000/api/users/avatar/${avatar}` : defaultAvatar} className="avatarEdit rounded img-thumbnail img-fluid"  alt="Avatar" />
-                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" filename={file} onChange={handleFile} />
-                            <input type="text" className="form-control mt-3" placeholder="Nombre" value={name} onChange={handleName} />   
-                            <input type="text" className="form-control mt-3" placeholder="Apellidos" value={lastname} onChange={handleLastname} />  
-                            <input type="email" className="form-control mt-3" placeholder="Email" value={email} onChange={handleEmail} />  
-                            <input type="password" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" onChange={handlePassword} /> 
+                            <input type="file" className="form-control mt-3" placeholder="Subir avatar" name="file" filename={form.file} onChange={handleFile} />
+                            <input type="text" className="form-control mt-3" placeholder="Nombre" name="name" value={form.name} onChange={handleData} />   
+                            <input type="text" className="form-control mt-3" placeholder="Apellidos" name="lastname" value={form.lastname} onChange={handleData} />  
+                            <input type="email" className="form-control mt-3" placeholder="Email" name="email" value={form.email} onChange={handleData} />  
+                            <input type="password" className="form-control mt-3" placeholder="nueva contraseña (dejar en blanco para no cambiar)" name="password" onChange={handleData} /> 
                             <input type="submit" className="btn btn-success form-control mt-3" value="Actualizar datos" />
                         </div>
                     </div>
