@@ -20,7 +20,7 @@ function UserFormComponent(){
         email: "",
         password: "",
         file: null
-    })
+    });
     const [avatar, setAvatar] = useState(null);
     const [id, setId] = useState("");
     const [alertSuccess, setAlertSuccess] = useState(false);
@@ -37,7 +37,6 @@ function UserFormComponent(){
         setForm({...form, [name]: value});
     }
 
-    // y otro para el archivo:
     const handleFile = (e) => {
         let file = {file: e.target.files[0]};
         setForm({...form, ...file})
